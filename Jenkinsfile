@@ -14,7 +14,7 @@ pipeline {
                     steps {
                         echo 'Running Semgrep on Pull Request...'
                         // --error: Fails the build if bugs are found
-                        sh 'semgrep scan --config=auto --error --output semgrep_report.txt .' 
+                        sh 'semgrep scan --config=p/secrets --error --output semgrep_report.txt .' 
                     }
                 }
                 stage('Trivy SCA') {
