@@ -1,3 +1,1 @@
-import subprocess
-subprocess.call('ls', shell=True)
-# This is a test comment to trigger Jenkins
+aws_secret_access_key = 'AKIAIMNOJVGFDEXAMPLE'
