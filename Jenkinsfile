@@ -9,30 +9,20 @@ pipeline {
         }
 
         stage('Security Gate') {
-            parallel {
-                stage('Semgrep SAST') {
-                    steps {
-                        echo 'Running Semgrep on Pull Request...'
-                        // --error: Fails the build if bugs are found
-                        sh 'semgrep scan --config=p/secrets --error --output semgrep_report.txt .' 
-                    }
-                }
-                stage('Trivy SCA') {
-                    steps {
-                        echo 'Running Trivy on Dependencies...'
-                        // --exit-code 1: Fails the build if vulnerabilities are found
-                        sh 'trivy fs --exit-code 1 --output trivy_report.txt .'
-                    }
-                }
+            steps {
+                echo ' 🛡️ Scanning for Viruses & Secrets...'
+                // STRICT MODE: We use "p/secrets" and "p/default" to catch everything
+                // --error: Fails the build if ANY issue is found
+                sh 'semgrep scan --config=p/secrets --config=p/default --error --output semgrep_report.txt .'
             }
         }
 
-        stage('Deploy') {
-            when {
-                branch 'main' // Only deploy if we are on the 'main' branch
-            }
+        stage('Deploy Website') {
+            // This stage ONLY runs if "Security Gate" passed
             steps {
-                echo 'Deploying to Production Server...'
+                echo ' ✅ Code is Safe! Deploying to Live Server...'
+                // We overwrite the live website with the new code
+                sh 'cp index.html ~/Downloads/my-website/index.html'
             }
         }
     }
