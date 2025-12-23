@@ -1,2 +1,1 @@
-import subprocess
-subprocess.call('ls', shell=True)
+aws_secret_access_key = 'AKIAIMNOJVGFDEXAMPLE'
